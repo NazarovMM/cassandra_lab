@@ -1,0 +1,3 @@
+docker run -d --name cassandra --hostname cassandra --network cassandra cassandra #кал
+docker start cassandra
+docker exec -it cassandra cqlsh
