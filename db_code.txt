@@ -1,6 +1,6 @@
 CREATE KEYSPACE audio_denoising WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
 
-use audio_denoising
+USE audio_denoising;
 
 CREATE TABLE auth_user (
 id_user uuid,
@@ -16,4 +16,46 @@ username text,
 date date,
 PRIMARY KEY (id_history)
 );
+
 CREATE INDEX ON history (username);
+
+INSERT INTO auth_user (username, password, email) VALUES ('maxzbox', '1234qaz', 'maxzbox1@sasa.com');
+INSERT INTO auth_user (username, password, email) VALUES ('zudinA', '1234wsx', 'zudinA@sasa.com');
+INSERT INTO history (id_history, username, date) VALUES (now(), 'maxzbox', '2023-01-12');
+
+select * from auth_user;
+select * from history;
+
+UPDATE history SET date = '2023-04-05' WHERE id_history=fae25b40-d3a0-11ed-8660-793e32e3fcb7;
+
+DELETE FROM auth_user WHERE username='zudinA';
+
+TRUNCATE history;
+DROP TABLE audio_denoising.history;
+
+CREATE TABLE history (
+id_history uuid,
+file_name text,
+username text,
+date date,
+PRIMARY KEY (username, id_history)
+);
+
+CREATE INDEX file_name_idx ON history (file_name);
+CREATE INDEX date_idx ON history (date);
+
+INSERT INTO history (id_history, file_name, username, date) VALUES (now(), '1', 'maxzbox', '2023-01-12');
+INSERT INTO history (id_history, file_name, username, date) VALUES (now(), '2', 'maxzbox', '2023-01-13');
+
+select * from history;
+
+select * from history WHERE id_history=c99a9890-d3a5-11ed-8660-793e32e3fcb7 and username='maxzbox';
+select * from history WHERE date > '2023-01-12' ALLOW FILTERING;
+
+select id_history, username from history WHERE date > '2023-01-12' ALLOW FILTERING;
+
+SELECT COUNT(*) FROM history;
+select max(date) from history;
+
+INSERT INTO history (id_history, file_name, username, date) VALUES (now(), '3', 'maxzbox', '2023-04-01') USING TTL 20;
+select * from history;
