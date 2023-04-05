@@ -1,0 +1,19 @@
+CREATE KEYSPACE audio_denoising WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
+
+use audio_denoising
+
+CREATE TABLE auth_user (
+id_user uuid,
+username text,
+password text,
+email text,
+PRIMARY KEY (username)
+);
+
+CREATE TABLE history (
+id_history  uuid,
+username text,
+date date,
+PRIMARY KEY (id_history)
+);
+CREATE INDEX ON history (username);
