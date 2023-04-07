@@ -38,7 +38,7 @@ id_history uuid,
 file_name text,
 username text,
 date date,
-PRIMARY KEY (username, id_history)
+PRIMARY KEY (id_history, date, file_name)
 );
 
 CREATE INDEX file_name_idx ON history (file_name);
@@ -49,7 +49,7 @@ INSERT INTO history (id_history, file_name, username, date) VALUES (now(), '2', 
 
 select * from history;
 
-select * from history WHERE id_history=c99a9890-d3a5-11ed-8660-793e32e3fcb7 and username='maxzbox';
+select * from history WHERE id_history=25776250-d3ac-11ed-a809-0d0ffec380e5 and username='maxzbox' ALLOW FILTERING;
 select * from history WHERE date > '2023-01-12' ALLOW FILTERING;
 
 select id_history, username from history WHERE date > '2023-01-12' ALLOW FILTERING;
