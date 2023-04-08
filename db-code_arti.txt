@@ -1,1 +1,38 @@
-111
+CREATE KEYSPACE lr3 WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
+
+CREATE TABLE user (
+id_user uuid,
+username text,
+password text,
+email text,
+PRIMARY KEY (username)
+);
+
+INSERT INTO user (username, password, email) VALUES ('admin', '1234567890', 'admin@admin.com');
+UPDATE user SET id_user = now() WHERE username = 'admin';
+DELETE FROM user WHERE username='admin';
+
+CREATE TABLE report (
+id_report uuid,
+report_num int,
+username text,
+date date,
+PRIMARY KEY (report_num, id_report)
+);
+
+CREATE INDEX id_report_idx ON report (id_report);
+CREATE INDEX date_idx ON report (date);
+
+
+INSERT INTO report (id_report, report_num, username, date) VALUES (now(), 1, 'admin', '2023-04-07');
+INSERT INTO report (id_report, report_num, username, date) VALUES (now(), 2, 'admin', '2023-04-08');
+
+SELECT * FROM report WHERE id_report=92873900-d5f6-11ed-94a7-e9ff5968ae93;
+SELECT * FROM user WHERE email='admin@admin.com' ALLOW FILTERING;
+SELECT id_report FROM report WHERE date='2023-04-08';
+
+SELECT COUNT(*) FROM report;
+SELECT max(date) FROM report;
+
+SELECT * FROM report;
+INSERT INTO report (id_report, report_num, username, date) VALUES (now(), 23, 'admin', '2023-04-08') USING TTL 20;
