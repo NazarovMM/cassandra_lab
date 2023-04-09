@@ -1,0 +1,37 @@
+CREATE KEYSPACE social WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
+use social;
+
+CREATE TABLE person (
+id_person uuid,
+city text,
+info text,
+first_name text,
+second_name text,
+passport text,
+PRIMARY KEY (id_person)
+);
+
+INSERT INTO person (id_person, city, info, first_name, second_name, passport) VALUES (now(), 'Moscow', '123', 'Admin', 'Admin', '1234567890');
+UPDATE person SET city = 'Gadykino' WHERE id_person = 6d3cb3b0-d6db-11ed-97f3-3169572c80ff;
+DELETE FROM person WHERE id_person = 6d3cb3b0-d6db-11ed-97f3-3169572c80ff;
+
+CREATE TABLE contact (
+id_contact uuid,
+callname text,
+phone text,
+PRIMARY KEY (callname, id_contact)
+);
+CREATE INDEX id_contact_idx ON contact (id_contact);
+
+INSERT INTO contact (id_contact, callname, phone) VALUES (now(), 'ment1', '84991234567');
+INSERT INTO contact (id_contact, callname, phone) VALUES (now(), 'ment2', '84997890102');
+
+SELECT * FROM contact WHERE id_contact=816c7a80-d6dd-11ed-b856-19101116a338;
+SELECT * FROM person WHERE city='Moscow' ALLOW FILTERING;
+SELECT callname FROM contact WHERE id_contact=816c7a80-d6dd-11ed-b856-19101116a338;
+
+SELECT COUNT(*) FROM contact;
+SELECT max(phone) FROM contact;
+
+INSERT INTO contact (id_contact, callname, phone) VALUES (now(), 'ment3', '84997891212') USING TTL 20;
+SELECT * FROM contact;
