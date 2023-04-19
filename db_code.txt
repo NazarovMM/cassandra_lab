@@ -26,6 +26,7 @@ INSERT INTO history (id_history, username, date) VALUES (now(), 'maxzbox', '2023
 select * from auth_user;
 select * from history;
 
+UPDATE auth_user SET id_user=now() WHERE username='maxzbox';
 UPDATE history SET date = '2023-04-05' WHERE id_history=fae25b40-d3a0-11ed-8660-793e32e3fcb7;
 
 DELETE FROM auth_user WHERE username='zudinA';
@@ -49,7 +50,7 @@ INSERT INTO history (id_history, file_name, username, date) VALUES (now(), '2', 
 
 select * from history;
 
-select * from history WHERE id_history=25776250-d3ac-11ed-a809-0d0ffec380e5 and username='maxzbox' ALLOW FILTERING;
+select * from history WHERE id_history=c5609b10-dc3a-11ed-b586-793b6ccaeb52 and username='maxzbox' ALLOW FILTERING;
 select * from history WHERE date > '2023-01-12' ALLOW FILTERING;
 
 select id_history, username from history WHERE date > '2023-01-12' ALLOW FILTERING;

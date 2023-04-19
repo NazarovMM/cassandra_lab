@@ -1,0 +1,37 @@
+$ docker run --name lr4 -d mongo:latest
+docker start lr4
+docker exec -it lr4 mongosh
+
+
+db.createCollection("user", {capped: false})
+db.user.insert({"ФИО":{"Фамилия": "Назаров", "Имя": "Максим"}, "login":"maxzbox", "password": "1234qaz", "email":"admin@email.com"})
+db.user.find().pretty()
+
+
+db.createCollection("history", {capped: false})
+db.history.insert({"login":"maxzbox", "file_name": "1", "date":Date()})
+db.history.insert({"login":"maxzbox", "file_name": "2", "date":Date()})
+db.history.find().pretty()
+
+
+db.createCollection("test", {capped: false})
+db.test.insert({"username":"maxzbox", "collection": {"bool":"True","info":{"inf_name":"info 1","inf_date":"info","inf_date":"16-04-2023"}}})
+db.test.find().pretty()
+
+db.test.update({"username":"maxzbox"}, {$set: {"check":"False"}})
+
+db.test.update({"username":"maxzbox"}, {$set: {"check":0}})
+
+db.test.update({"username":"maxzbox"}, {$unset: {"check":""}})
+
+db.user.replaceOne({"ФИО.Фамилия": "Назаров"}, {"ФИО.Имя": "Максим1", "login":"maxzbox1", "password": "1234qaz1", "email":"admin1@email.com"})
+
+db.history.find({$and: [{"login":"maxzbox"}, {"file_name":"2"}]}).pretty()
+db.history.find().sort({"date":-1}).pretty()
+
+db.history.insert({"login":"ягвштФ", "file_name": "3", "date":Date()})
+db.history.distinct("login")
+
+db.test.insert({"username":"maxzbox1", "collection": {"bool":"False","info":{"inf_name":"info 2","inf_date":"info","inf_date":"16-04-2023"}}})
+db.test.find({$and: [{"collection.bool":"False"},{"username":"maxzbox1"}]}).pretty()
+db.test.find({"collection.bool":"False"}).pretty()
