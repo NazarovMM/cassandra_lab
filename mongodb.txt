@@ -35,3 +35,5 @@ db.history.distinct("login")
 db.test.insert({"username":"maxzbox1", "collection": {"bool":"False","info":{"inf_name":"info 2","inf_date":"info","inf_date":"16-04-2023"}}})
 db.test.find({$and: [{"collection.bool":"False"},{"username":"maxzbox1"}]}).pretty()
 db.test.find({"collection.bool":"False"}).pretty()
+
+db.test.find({$and: [{"collection.bool":"False"},{"username":"maxzbox1"}]},{"collection.inf_date:":1}).pretty()
