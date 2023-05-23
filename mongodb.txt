@@ -37,3 +37,10 @@ db.test.find({$and: [{"collection.bool":"False"},{"username":"maxzbox1"}]}).pret
 db.test.find({"collection.bool":"False"}).pretty()
 
 db.test.find({$and: [{"collection.bool":"False"},{"username":"maxzbox1"}]},{"collection.inf_date:":1}).pretty()
+
+Расширение
+db.history.find( { history_name: { $exists: true } } )
+db.history.find().limit(1)
+db.history.find( { date: { $gt: 'Sun Apr 16 2023 11:08:59 GMT+0000 (Coordinated Universal Time)' } } )
+db.user.find( { 'ФИО': { $all: [{'Фамилия':'Назаров', 'Имя':'Максим'}] } } )
+db.history.aggregate([ {$group: { _id: "$login", count: { $sum: 1 } } } ])

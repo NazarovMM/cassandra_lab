@@ -1,0 +1,91 @@
+docker pull neo4j
+docker run \
+    --publish=7474:7474 --publish=7687:7687 \
+    --env=NEO4J_AUTH=none \
+    neo4j
+
+login: neo4j password: ApZStL8azaGAK2z
+
+CREATE (a: auth_user { user: 'maxzbox',
+    email: 'yadmin@admin.com',
+    password: 'yadmin123'})
+CREATE (a: auth_user { user: 'zudinA',
+    email: 'zudinA@net.com',
+    password: 'zuzu'})
+
+MATCH (a) WHERE a.user='maxzbox'
+RETURN a.email
+
+CREATE (h: history { name: '1',
+    create_user: 'maxzbox',
+    date: '01.05.2023'})
+CREATE (h: history { name: '2',
+    create_user: 'maxzbox',
+    date: '02.05.2023'})
+CREATE (h: history { name: '3',
+    create_user: 'zudinA',
+    date: '02.05.2023'})
+
+MATCH (a:auth_user), (b:history) WHERE a.user = 'maxzbox' AND b.create_user = 'maxzbox' CREATE (a)-[r:created_by]->(b) RETURN r
+MATCH (a:auth_user), (b:history) WHERE a.user = 'zudinA' AND b.create_user = 'zudinA' CREATE (a)-[r:created_by]->(b) RETURN r
+
+CREATE (h: history { name: '4',
+    create_user: 'zudinA',
+    date: '02.05.2043'})
+
+MATCH (h) WHERE h.name='4'
+SET h.date='01.05.2023'
+RETURN h
+
+MATCH (h) WHERE h.name='4'
+remove h.date
+RETURN h
+
+MATCH (h:history{name:'4'}) REMOVE h:history SET h:test RETURN h
+
+MATCH (h:test{name:'4'}) REMOVE h:test RETURN h
+
+MATCH (n) WHERE size(labels(n)) = 0 DELETE n
+
+MATCH (a:auth_user {user: 'zudinA'})
+DETACH DELETE a
+
+MATCH (a:auth_user)-[c:created_by]->(h:history) DELETE c
+
+MATCH (a:auth_user {user: 'maxzbox'}) return a
+
+match (h:history) return h
+
+MATCH (a:auth_user), (b:history) WHERE a.user = 'maxzbox' AND b.name = '3' CREATE (a)-[r:watching]->(b) RETURN r
+
+MATCH (a:auth_user)-[w:watching]->(h:history) return a,h
+#6
+MATCH (a:auth_user) WHERE a.email IS NOT NULL RETURN a 
+MATCH (a:auth_user) WHERE a.user='maxzbox' and a.email='zudinA@net.com' RETURN a 
+MATCH (h:history) RETURN h.name, h.date ORDER BY h.date
+MATCH (a:auth_user)-->(h:history) return a,h
+MATCH (a:auth_user)-[w:created_by]->(h:history) where h.name='1' return a,h
+
+Расширение
+MATCH (h:history) RETURN h LIMIT 1
+
+MATCH (a:auth_user) RETURN a AS result UNION MATCH (h:history) RETURN h AS result
+MERGE (a:auth_user{user:'maxzbox',email:'yadmin@admin.com', password:'yadmin123'})
+
+match (a:auth_user) return(count(a))
+match (a:auth_user) return reverse(a.user)
+MATCH (h:history) RETURN DISTINCT h.date
+
+START n=a.auth_user(1)
+MATCH (n)-[r]->(m)
+RETURN m
+
+Дополнительная
+CREATE INDEX creator
+FOR (h:history)
+ON (h.create_user)
+
+CREATE CONSTRAINT uniqUser
+FOR (a:auth_user)
+REQUIRE a.user IS UNIQUE
+
